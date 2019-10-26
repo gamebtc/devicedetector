@@ -3,7 +3,8 @@ DeviceDetector
 
 ## Description
 
-The Universal Device Detection library that parses User Agents and detects devices (desktop, tablet, mobile, tv, cars, console, etc.), clients (browsers, feed readers, media players, PIMs, ...), operating systems, brands and models.
+The Universal Device Detection library for golang that parses User Agents and detects devices (desktop, tablet, mobile, tv, cars, console, etc.), clients (browsers, feed readers, media players, PIMs, ...), operating systems, brands and models.
+This is a port of the popular PHP [device-detector](https://github.com/matomo-org/device-detector) library to golang  For the most part you can just follow the documentation for device-detector with no issue.
 
 Installation
 ------------
@@ -67,32 +68,6 @@ func main() {
 }
 ```
 
-
-Instead of using the full power of DeviceDetector it might in some cases be better to use only specific parsers.
-If you aim to check if a given useragent is a bot and don't require any of the other information, you can directly use the bot parser.
-
-```go
-require_once 'vendor/autoload.php';
-
-use DeviceDetector\Parser\Bot AS BotParser;
-
-$botParser = new BotParser();
-$botParser->setUserAgent($userAgent);
-
-// OPTIONAL: discard bot information. parse() will then return true instead of information
-$botParser->discardDetails();
-
-$result = $botParser->parse();
-
-if (!is_null($result)) {
-    // do not do anything if a bot is detected
-    return;
-}
-
-// handle non-bot requests
-
-```
-
 ## Tests
 
 go test
@@ -117,6 +92,7 @@ go test
 
 There are already a few ports of this tool to other languages:
 
+- **PHP** https://github.com/matomo-org/device-detector
 - **.NET** https://github.com/totpero/DeviceDetector.NET
 - **Ruby** https://github.com/podigee/device_detector
 - **Javascript/Node.js** https://github.com/etienne-martin/device-detector-js
