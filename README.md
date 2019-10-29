@@ -18,15 +18,13 @@ go get github.com/gamebtc/devicedetector
 Examples
 --------
 
-How import the package
-
 ```go
 package main
 
 import (
 	"fmt"
 	"log"
-	
+
 	. "github.com/gamebtc/devicedetector"
 )
 
@@ -35,28 +33,28 @@ func main() {
 	if err != nil {
 		log.Fatal(err)
 	}
-	userAgent := `Mozilla/4.0 (compatible; MSIE 8.0; Windows NT 6.1; Trident/4.0; SLCC2; .NET CLR 2.0.50727; .NET CLR 3.5.30729; .NET CLR 3.0.30729; Media Center PC 6.0; MDDR; .NET4.0C; .NET4.0E; .NET CLR 1.1.4322; Tablet PC 2.0); 360Spider`
+	userAgent := `Mozilla/5.0 (iPhone; CPU iPhone OS 11_0 like Mac OS X) AppleWebKit/604.1.38 (KHTML, like Gecko) Version/11.0 Mobile/15A372 Safari/604.1`
 	info := dd.Parse(userAgent)
 
-	fmt.Println(info.Model)
-	fmt.Println(info.Brand)
-	fmt.Println(info.Type)
+	fmt.Println(info.Model) // iPhone
+	fmt.Println(info.Brand) // AP
+	fmt.Println(info.Type)  // smartphone
 
-	os := info.GetOs()
-	fmt.Println(os.Version)
-	fmt.Println(os.ShortName)
-	fmt.Println(os.Name)
-	fmt.Println(os.Platform)
+	os := info.GetOs()        //
+	fmt.Println(os.Version)   // 11.0
+	fmt.Println(os.ShortName) // IOS
+	fmt.Println(os.Name)      // iOS
+	fmt.Println(os.Platform)  //
 
 	client := info.GetClient()
-	fmt.Println(client.Type)
-	fmt.Println(client.Name)
-	fmt.Println(client.Version)
+	fmt.Println(client.Type)    // browser
+	fmt.Println(client.Name)    // Mobile Safari
+	fmt.Println(client.Version) // 11.0
 
 	if client.Type == `browser` {
-		fmt.Println(client.ShortName)
-		fmt.Println(client.Engine)
-		fmt.Println(client.EngineVersion)
+		fmt.Println(client.ShortName)     // MF
+		fmt.Println(client.Engine)        // WebKit
+		fmt.Println(client.EngineVersion) // 604.1.38
 	}
 
 	bot := info.GetBot()
@@ -64,7 +62,6 @@ func main() {
 		fmt.Println(bot.Name)
 		//.................
 	}
-
 }
 ```
 
