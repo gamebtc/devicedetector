@@ -1,11 +1,16 @@
 package devicedetector
 
 import (
+	"strconv"
+	"sync"
 	"testing"
 
 	"gotest.tools/assert"
 
+	regexp "github.com/dlclark/regexp2"
 	. "github.com/gamebtc/devicedetector/parser"
+	"github.com/gamebtc/devicedetector/parser/client"
+	"github.com/gamebtc/devicedetector/parser/device"
 )
 
 var dd, _ = NewDeviceDetector("regexes")
@@ -155,4 +160,49 @@ func TestSkipBotDetection(t *testing.T) {
 	info = dd.Parse(ua)
 	assert.Check(t, info.IsMobile())
 	assert.Check(t, info.IsBot() == false)
+}
+
+type SmartFixture struct {
+	UserAgent     string                    `yaml:"user_agent"`
+	Os            *OsMatchResult            `yaml:"os"`
+	Client        *client.ClientMatchResult `yaml:"client"`
+	Device        *device.DeviceMatchResult `yaml:"device"`
+	OsFamily      string                    `yaml:"os_family"`
+	BrowserFamily string                    `yaml:"browser_family"`
+}
+
+func TestRegThread(t *testing.T) {
+	// read file
+	var lists [][]*SmartFixture
+	for i := 0; i <= 12; i++ {
+		var list []*SmartFixture
+		var name string
+		if i == 0 {
+			name = `smartphone.yml`
+		} else {
+			name = `smartphone-` + strconv.Itoa(i) + `.yml`
+		}
+		err := ReadYamlFile(`fixtures/`+name, &list)
+		if err == nil {
+			lists = append(lists, list)
+		}
+	}
+	rs := []*regexp.Regexp{adrMobReg, touchReg, adrTabReg, chrMobReg, chrTabReg, opaTabReg, opaTvReg}
+	var wg sync.WaitGroup
+	for i := 0; i < 10; i++ {
+		for _, list := range lists {
+			wg.Add(1)
+			go func() {
+				defer wg.Done()
+				for _, f := range list {
+					ua := f.UserAgent
+					for _, reg := range rs {
+						reg.MatchString(ua)
+						reg.FindStringMatch(ua)
+					}
+				}
+			}()
+		}
+	}
+	wg.Wait()
 }

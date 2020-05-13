@@ -21,6 +21,8 @@ var availableEngines = []string{
 	`NetFront`,
 	`Edge`,
 	`NetSurf`,
+	`Servo`,
+	`Goanna`,
 }
 
 const ParserNameBrowserEngine = `browserengine`

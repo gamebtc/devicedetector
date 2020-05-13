@@ -7,8 +7,6 @@ import (
 	"gotest.tools/assert"
 )
 
-
-
 func TestOsParse(t *testing.T) {
 	type OsFixture struct {
 		OsMatchResult `yaml:"os" json:"os"`

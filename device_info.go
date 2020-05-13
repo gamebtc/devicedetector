@@ -53,24 +53,16 @@ func (d *DeviceInfo) IsMobile() bool {
 	if d.Type != "" {
 		if deviceType := GetDeviceType(d.Type); DEVICE_TYPE_INVALID != deviceType {
 			switch deviceType {
-			case DEVICE_TYPE_FEATURE_PHONE:
+			case DEVICE_TYPE_FEATURE_PHONE,
+				DEVICE_TYPE_SMARTPHONE,
+				DEVICE_TYPE_TABLET,
+				DEVICE_TYPE_PHABLET,
+				DEVICE_TYPE_CAMERA,
+				DEVICE_TYPE_PORTABLE_MEDIA_PAYER:
 				return true
-			case DEVICE_TYPE_SMARTPHONE:
-				return true
-			case DEVICE_TYPE_TABLET:
-				return true
-			case DEVICE_TYPE_PHABLET:
-				return true
-			case DEVICE_TYPE_CAMERA:
-				return true
-			case DEVICE_TYPE_PORTABLE_MEDIA_PAYER:
-				return true
-
-			case DEVICE_TYPE_TV:
-				return false
-			case DEVICE_TYPE_SMART_DISPLAY:
-				return false
-			case DEVICE_TYPE_CONSOLE:
+			case DEVICE_TYPE_TV,
+				DEVICE_TYPE_SMART_DISPLAY,
+				DEVICE_TYPE_CONSOLE:
 				return false
 			}
 		}

@@ -13,7 +13,7 @@ import (
 )
 
 const UNKNOWN = "UNK"
-const VERSION = `3.12.1`
+const VERSION = `3.12.5`
 
 var desktopOsArray = []string{
 	`AmigaOS`,
@@ -173,7 +173,7 @@ func (d *DeviceDetector) parseInfo(info *DeviceInfo) {
 	osShortName := os.ShortName
 	osFamily := GetOsFamily(osShortName)
 	osVersion := os.Version
-	clientName := info.GetClient().Name
+	cmr := info.GetClient()
 
 	if info.Brand == "" && (osShortName == `ATV` || osShortName == `IOS` || osShortName == `MAC`) {
 		info.Brand = `AP`
@@ -183,11 +183,13 @@ func (d *DeviceDetector) parseInfo(info *DeviceInfo) {
 	// Chrome on Android passes the device type based on the keyword 'Mobile'
 	// If it is present the device should be a smartphone, otherwise it's a tablet
 	// See https://developer.chrome.com/multidevice/user-agent#chrome_for_android_user_agent
-	if deviceType == DEVICE_TYPE_INVALID && osFamily == `Android` && (clientName == `Chrome` || clientName == `Chrome Mobile`) {
-		if ok, _ := chrMobReg.MatchString(ua); ok {
-			deviceType = DEVICE_TYPE_SMARTPHONE
-		} else if ok, _ = chrTabReg.MatchString(ua); ok {
-			deviceType = DEVICE_TYPE_TABLET
+	if deviceType == DEVICE_TYPE_INVALID && osFamily == `Android` {
+		if browserName,ok:=client.GetBrowserFamily(cmr.ShortName); ok&&browserName== `Chrome` {
+			if ok, _ := chrMobReg.MatchString(ua); ok {
+				deviceType = DEVICE_TYPE_SMARTPHONE
+			} else if ok, _ = chrTabReg.MatchString(ua); ok {
+				deviceType = DEVICE_TYPE_TABLET
+			}
 		}
 	}
 
@@ -227,7 +229,7 @@ func (d *DeviceDetector) parseInfo(info *DeviceInfo) {
 
 	// Devices running Kylo or Espital TV Browsers are assumed to be a TV
 	if deviceType == DEVICE_TYPE_INVALID {
-		if clientName == `Kylo` || clientName == `Espial TV Browser` {
+		if cmr.Name == `Kylo` || cmr.Name == `Espial TV Browser` {
 			deviceType = DEVICE_TYPE_TV
 		} else if info.IsDesktop() {
 			deviceType = DEVICE_TYPE_DESKTOP
