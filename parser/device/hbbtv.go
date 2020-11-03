@@ -17,9 +17,12 @@ func init() {
 }
 
 func NewHbbTv(fileName string) *HbbTv {
-	h := &HbbTv{}
+	h := &HbbTv{
+		hbbTvRegx:            Regular{
+			Regex:  `HbbTV/([1-9]{1}(?:.[0-9]{1}){1,2})`,
+		},
+	}
 	if err := h.Load(fileName); err != nil {
-		h.hbbTvRegx.Regex = `HbbTV/([1-9]{1}(?:.[0-9]{1}){1,2})`
 		return nil
 	}
 	return h

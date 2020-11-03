@@ -26,11 +26,11 @@ var desktopOsArray = []string{
 	`Chrome OS`,
 }
 
-var(
+var (
 	chrMobReg = regexp.MustCompile(fixUserAgentRegEx(`Chrome/[\.0-9]* Mobile`), regexp.IgnoreCase)
 	chrTabReg = regexp.MustCompile(fixUserAgentRegEx(`Chrome/[\.0-9]* (?!Mobile)`), regexp.IgnoreCase)
 	opaTabReg = regexp.MustCompile(fixUserAgentRegEx(`Opera Tablet`), regexp.IgnoreCase)
-	opaTvReg = regexp.MustCompile(fixUserAgentRegEx(`Opera TV Store`), regexp.IgnoreCase)
+	opaTvReg  = regexp.MustCompile(fixUserAgentRegEx(`Opera TV Store`), regexp.IgnoreCase)
 )
 
 func fixUserAgentRegEx(regex string) string {
@@ -89,7 +89,6 @@ func NewDeviceDetector(dir string) (*DeviceDetector, error) {
 	d.botParsers = []BotParser{
 		NewBot(filepath.Join(dir, FixtureFileBot)),
 	}
-
 
 	return d, nil
 }
@@ -184,7 +183,7 @@ func (d *DeviceDetector) parseInfo(info *DeviceInfo) {
 	// If it is present the device should be a smartphone, otherwise it's a tablet
 	// See https://developer.chrome.com/multidevice/user-agent#chrome_for_android_user_agent
 	if deviceType == DEVICE_TYPE_INVALID && osFamily == `Android` {
-		if browserName,ok:=client.GetBrowserFamily(cmr.ShortName); ok&&browserName== `Chrome` {
+		if browserName, ok := client.GetBrowserFamily(cmr.ShortName); ok && browserName == `Chrome` {
 			if ok, _ := chrMobReg.MatchString(ua); ok {
 				deviceType = DEVICE_TYPE_SMARTPHONE
 			} else if ok, _ = chrTabReg.MatchString(ua); ok {
@@ -268,4 +267,3 @@ func (d *DeviceDetector) Parse(ua string) *DeviceInfo {
 
 	return info
 }
-

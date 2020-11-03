@@ -17,9 +17,9 @@ var (
 type DeviceInfo struct {
 	userAgent string
 	device.DeviceMatchResult
-	client    *client.ClientMatchResult
-	os        *OsMatchResult
-	bot       *BotMatchResult
+	client *client.ClientMatchResult
+	os     *OsMatchResult
+	bot    *BotMatchResult
 }
 
 func (d *DeviceInfo) GetDeviceType() int {
