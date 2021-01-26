@@ -174,7 +174,7 @@ type SmartFixture struct {
 func TestRegThread(t *testing.T) {
 	// read file
 	var lists [][]*SmartFixture
-	for i := 0; i <= 12; i++ {
+	for i := 0; i <= 21; i++ {
 		var list []*SmartFixture
 		var name string
 		if i == 0 {
