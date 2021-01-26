@@ -3,9 +3,9 @@ package devicedetector
 import (
 	regexp "github.com/dlclark/regexp2"
 
-	. "github.com/gamebtc/devicedetector/parser"
-	"github.com/gamebtc/devicedetector/parser/client"
-	"github.com/gamebtc/devicedetector/parser/device"
+	. "github.com/muxinc/devicedetector/parser"
+	"github.com/muxinc/devicedetector/parser/client"
+	"github.com/muxinc/devicedetector/parser/device"
 )
 
 var (

@@ -1,4 +1,4 @@
-module github.com/gamebtc/devicedetector
+module github.com/muxinc/devicedetector
 
 go 1.13
 
