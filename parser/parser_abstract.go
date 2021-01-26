@@ -79,10 +79,16 @@ func (r *Regular) Compile() *regexp.Regexp {
 	if r.Regexp == nil {
 		// $regex = '/(?:^|[^A-Z_-])(?:' . str_replace('/', '\/', $regex) . ')/i';
 		//str := `(?i)(?:^|[^A-Z0-9-_]|[^A-Z0-9-]_|sprd-)(?:` + r.Regex + ")"
+
+		// Make some adjustments for a different regex engine than upstream matomo
 		rg := r.Regex
 		rg = strings.Replace(rg, `/`, `\/`, -1)
 		rg = strings.Replace(rg, `++`, `+`, -1)
 		rg = strings.Replace(rg, `\_`, `_`, -1)
+		// if we find `\_` again, the original was `\\_`,
+		// so restore that so the regex engine does not attempt to escape `_`
+		rg = strings.Replace(rg, `\_`, `\\_`, -1)
+
 		str := `(?:^|[^A-Z0-9-_]|[^A-Z0-9-]_|sprd-)(?:` + rg + ")"
 		r.Regexp = regexp.MustCompile(str, regexp.IgnoreCase)
 	}
