@@ -7,9 +7,9 @@ import (
 	regexp "github.com/dlclark/regexp2"
 	gover "github.com/mcuadros/go-version"
 
-	. "github.com/gamebtc/devicedetector/parser"
-	"github.com/gamebtc/devicedetector/parser/client"
-	"github.com/gamebtc/devicedetector/parser/device"
+	. "github.com/muxinc/devicedetector/parser"
+	"github.com/muxinc/devicedetector/parser/client"
+	"github.com/muxinc/devicedetector/parser/device"
 )
 
 const UNKNOWN = "UNK"

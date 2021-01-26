@@ -2,10 +2,10 @@ package client
 
 import (
 	"path/filepath"
-	
+
 	gover "github.com/mcuadros/go-version"
 
-	. "github.com/gamebtc/devicedetector/parser"
+	. "github.com/muxinc/devicedetector/parser"
 )
 
 // Known browsers mapped to their internal short codes
