@@ -206,3 +206,28 @@ func TestRegThread(t *testing.T) {
 	}
 	wg.Wait()
 }
+
+
+func benchmarkUserAgent(b *testing.B, ua string) {
+	dd.SkipBotDetection = true
+	// parse and then reset the timer,
+	// the first call to .Parse() will compile some regexes
+	// and we just want to measure time to match the regex instead
+	dd.Parse(ua)
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		dd.Parse(ua)
+	}
+}
+
+func BenchmarkParseDeviceInfoForBrowser(b *testing.B) {
+	benchmarkUserAgent(b, `Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:85.0) Gecko/20100101 Firefox/85.0`)
+}
+
+func BenchmarkParseDeviceInfoFor(b *testing.B) {
+	benchmarkUserAgent(b, `Mozilla/5.0 (Linux; Android 4.4.3; Build/KTU84L) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/37.0.2062.117 Mobile Safari/537.36`)
+}
+
+func BenchmarkParseDeviceInfoForMobile(b *testing.B) {
+	benchmarkUserAgent(b, `Mozilla/5.0 (Linux; Android 4.4.4; MX4 Pro Build/KTU84P) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/33.0.0.0 Mobile Safari/537.36; 360 Aphone Browser (6.9.7)`)
+}
