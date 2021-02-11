@@ -1,7 +1,7 @@
 package parser
 
 import (
-	"fmt"
+	"log"
 	"regexp"
 	goregexp "regexp"
 	"strings"
@@ -57,7 +57,7 @@ func (r *Regexp) Compile() error {
 
 func (r *Regexp) MustCompile() {
 	if err := r.Compile(); err != nil {
-		panic(fmt.Sprintf("Could not compile regex '%s': %v", r.expression, err))
+		log.Panicf("Could not compile regex '%s': %v", r.expression, err)
 	}
 }
 
