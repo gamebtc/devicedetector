@@ -21,37 +21,28 @@ func NewRegexp(re string) *Regexp {
 	return r
 }
 
+// Make some adjustments for a different regex engine than upstream matomo
+func cleanRegexString(re string) string {
+	rg := strings.Replace(re, `/`, `\/`, -1)
+	rg = strings.Replace(rg, `++`, `+`, -1)
+	rg = strings.Replace(rg, `\_`, `_`, -1)
+	// if we find `\_` again, the original was `\\_`,
+	// so restore that so the regex engine does not attempt to escape `_`
+	rg = strings.Replace(rg, `\_`, `\\_`, -1)
+
+	// only match if useragent begins with given regex or there is no letter before it
+	return `(?:^|[^A-Z0-9-_]|[^A-Z0-9-]_|sprd-)(?:` + rg + ")"
+}
+
 func (r *Regexp) compileGoRegex() error {
-		// Make some adjustments for a different regex engine than upstream matomo
-		rg := r.expression
-		rg = strings.Replace(rg, `/`, `\/`, -1)
-		rg = strings.Replace(rg, `++`, `+`, -1)
-		rg = strings.Replace(rg, `\_`, `_`, -1)
-		// if we find `\_` again, the original was `\\_`,
-		// so restore that so the regex engine does not attempt to escape `_`
-		rg = strings.Replace(rg, `\_`, `\\_`, -1)
-
-		str := `(?i)(?:^|[^A-Z0-9-_]|[^A-Z0-9-]_|sprd-)(?:` + rg + ")"
-
 		var err error
-		r.regexpGo, err = regexp.Compile(str)
+		r.regexpGo, err = regexp.Compile(`(?i)` + cleanRegexString(r.expression))
 		return err
 }
 
 func (r *Regexp) compileLibRegex() error {
-		// Make some adjustments for a different regex engine than upstream matomo
-		rg := r.expression
-		rg = strings.Replace(rg, `/`, `\/`, -1)
-		rg = strings.Replace(rg, `++`, `+`, -1)
-		rg = strings.Replace(rg, `\_`, `_`, -1)
-		// if we find `\_` again, the original was `\\_`,
-		// so restore that so the regex engine does not attempt to escape `_`
-		rg = strings.Replace(rg, `\_`, `\\_`, -1)
-
-		str := `(?:^|[^A-Z0-9-_]|[^A-Z0-9-]_|sprd-)(?:` + rg + ")"
-
 		var err error
-		r.regexpLib, err = regexp2.Compile(str, regexp2.IgnoreCase)
+		r.regexpLib, err = regexp2.Compile(cleanRegexString(r.expression), regexp2.IgnoreCase)
 		return err
 }
 
@@ -71,8 +62,6 @@ func (r *Regexp) MustCompile() {
 }
 
 func (r *Regexp) MatchString(ua string) bool {
-	r.MustCompile()
-
 	if r.regexpGo != nil {
 		return r.regexpGo.MatchString(ua)
 	}
@@ -82,8 +71,6 @@ func (r *Regexp) MatchString(ua string) bool {
 }
 
 func (r *Regexp) FindStringSubmatch(ua string) []string {
-	r.MustCompile()
-
 	if r.regexpGo != nil {
 		return r.regexpGo.FindStringSubmatch(ua)
 	}

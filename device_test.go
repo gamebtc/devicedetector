@@ -62,6 +62,7 @@ func TestVersionTruncation(t *testing.T) {
 		assert.Equal(t, info.GetOs().Version, v[1])
 		assert.Equal(t, info.GetClient().Version, v[2])
 	}
+	SetVersionTruncation(VERSION_TRUNCATION_NONE)
 }
 
 func TestBot(t *testing.T) {
