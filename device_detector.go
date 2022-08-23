@@ -119,12 +119,10 @@ func (d *DeviceDetector) GetBotParsers() []BotParser {
 }
 
 func (d *DeviceDetector) ParseBot(ua string) *BotMatchResult {
-	if !d.SkipBotDetection {
-		for _, parser := range d.botParsers {
-			parser.DiscardDetails(d.DiscardBotInformation)
-			if r := parser.Parse(ua); r != nil {
-				return r
-			}
+	for _, parser := range d.botParsers {
+		parser.DiscardDetails(d.DiscardBotInformation)
+		if r := parser.Parse(ua); r != nil {
+			return r
 		}
 	}
 	return nil
@@ -252,9 +250,11 @@ func (d *DeviceDetector) Parse(ua string) *DeviceInfo {
 		userAgent: ua,
 	}
 
-	info.bot = d.ParseBot(ua)
-	if info.IsBot() {
-		return info
+	if !d.SkipBotDetection {
+		info.bot = d.ParseBot(ua)
+		if info.IsBot() {
+			return info
+		}
 	}
 
 	info.os = d.ParseOs(ua)
